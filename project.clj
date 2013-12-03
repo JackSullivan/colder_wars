@@ -12,12 +12,14 @@
   (let [os (leiningen.core.eval/get-os)]
     (get LWJGL-CLASSIFIER os)))
 
-(defproject colder-wars "0.1.0-SNAPSHOT"
+(defproject colder-wars "0.0.1-SNAPSHOT"
   :description "FIXME: write description"
   :url "http://example.com/FIXME"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/clojure "1.4.0"]
+  :dependencies [[org.clojure/clojure "1.5.1"]
+                 [org.clojure/core.logic "0.8.5"]
+;;                  [slingshot "0.10.3"]
                  [net.mikera/core.matrix "0.9.0"]
                  [net.mikera/vectorz-clj "0.13.2"]
                  [org.lwjgl.lwjgl/lwjgl "2.9.0"]
