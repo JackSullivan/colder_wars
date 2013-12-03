@@ -20,8 +20,12 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/core.logic "0.8.5"]
 ;;                  [slingshot "0.10.3"]
+                 [quil "1.6.0"]
                  [net.mikera/core.matrix "0.9.0"]
                  [net.mikera/vectorz-clj "0.13.2"]
+                 [incanter/incanter-core "1.4.0"]
+                 [incanter/incanter-charts "1.4.0"]
+                 [org.clojure/math.combinatorics "0.0.4"]
                  [org.lwjgl.lwjgl/lwjgl "2.9.0"]
                  [org.lwjgl.lwjgl/lwjgl_util "2.9.0"]
                  [org.lwjgl.lwjgl/lwjgl-platform "2.9.0"

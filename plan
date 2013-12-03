@@ -1,0 +1,7 @@
+Actually writing colder wars:
+
+Physics simulation:
+- potentially use incanter matrices for speed
+- universal timestep multiplies all velocities/accelerations
+- location is a vector len 3
+- speed is a vector len 3

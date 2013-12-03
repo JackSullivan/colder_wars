@@ -2,6 +2,8 @@
   (:gen-class)
   (:import (org.lwjgl.opengl Display ContextAttribs PixelFormat DisplayMode)))
 
+(def UNIVERSAL_TIMESTEP 0.01)
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
