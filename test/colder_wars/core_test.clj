@@ -1,6 +1,6 @@
-(ns colder-wars.core-test
-  (:use clojure.test
-        colder-wars.core))
+(ns colder-warscore-test
+  (:require [clojure.test :refer :all]
+            [colder-wars.core :refer :all]))
 
 (deftest a-test
   (testing "FIXME, I fail."
