@@ -6,7 +6,10 @@
                  [com.badlogicgames.gdx/gdx "0.9.9"]
                  [com.badlogicgames.gdx/gdx-backend-lwjgl "0.9.9"]
                  [com.badlogicgames.gdx/gdx-platform "0.9.9"
-                  :classifier "natives-desktop"]]
+                  :classifier "natives-desktop"]
+                 [com.badlogicgames.gdx/gdx-bullet-platform "0.9.9"
+                  :classifier "natives-desktop"]
+                 [com.badlogicgames.gdx/gdx-bullet "0.9.9"]]
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
   :aot [#"so.modernized.colder-wars.*"]
