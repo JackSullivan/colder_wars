@@ -1,4 +1,7 @@
-(ns so.modernized.colder-wars.util)
+(ns so.modernized.colder-wars.util
+  (:require [clojure.string :as str])
+  (:use [so.modernized.high-concept.core]))
+;         [so.modernized.high-concept/core]]))
 
 
 ; Shamelessly yoinked from clojure/core.clj
@@ -31,4 +34,20 @@
                                 (finally
                                   (.dispose ~(bindings 0)))))
     :else (throw (IllegalArgumentException.
-                   "with-open only allows Symbols in bindings"))))
+                   "with-disposal only allows Symbols in bindings"))))
+
+;(defmacro ^{:private true} camel
+;  [s]
+;  (symbol
+;   (str/replace s #"-(\w)" #(str/upper-case (second %)))))
+
+(defn- camelize
+  [sym]
+  (-> sym (str/replace #"-(\w)" (comp str/upper-case second))))
+
+(def ^:private capitalize (trident (comp str/upper-case first) str (comp (partial apply str) rest)))
+
+(defmacro safely-get
+  [from field result]
+    (let [getter (->> field camelize capitalize (str "get") symbol)]
+    `(.set ~result (. ~from ~getter))))
