@@ -8,12 +8,10 @@
             btDiscreteDynamicsWorld btRigidBodyConstructionInfo btRigidBody]
            [com.badlogic.gdx.physics.bullet.linearmath btTransform btDefaultMotionState]))
 
-(float-array 1 2 3 45)
-
-(Bullet/init )
+ (Bullet/init )
 
 (with-disposal [broadphase (btDbvtBroadphase. )
-                     collision-config (btDefaultCollisionConfiguration. )
+                collision-config (btDefaultCollisionConfiguration. )
                 dispatcher (btCollisionDispatcher. collision-config)
                 solver (btSequentialImpulseConstraintSolver. )
                 dynamics-world (btDiscreteDynamicsWorld. dispatcher broadphase solver collision-config)
@@ -30,17 +28,24 @@
     (.setGravity (make-vector 0 -10 0))
     (.addRigidBody ground-rigid-body)
     (.addRigidBody fall-rigid-body))
-  (->> #(.stepSimulation dynamics-world (float 1/60) 10)
-       repeatedly
-       (take 300)
-       (map (fn [_]
-              (let [mat ])(doto fall-rigid-body
-                      (.getMotionState)
-                      (.getWorldTransform)))))
-  (take 300 (repeatedly #(.stepSimulation dynamics-world (float 1/60) 10)))
+  (let [mat (eye 4)]
+    (doto fall-rigid-body
+      (.getMotionState))
+    (safely-get fall-rigid-body world-transform mat)))
+    ;(.set mat (.getWorldTransform fall-rigid-body))))
+;  (->> #(.stepSimulation dynamics-world (float 1/60) 10)
+;       repeatedly
+;       (take 300)
+;       (map (fn [_]
+;              (let [mat (eye 4)]
+;                (doto fall-rigid-body
+;                  (.getMotionState)
+;                  (.getWorldTransform mat))
+;                (-> mat #(.getOrigin %) #(.getY %)))))))
+;  (take 300 (repeatedly #(.stepSimulation dynamics-world (float 1/60) 10))))
 
 
-  )
+ ; )
 
 ;(println "Hello World!")
 
