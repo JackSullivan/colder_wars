@@ -14,5 +14,5 @@
   :global-vars {*warn-on-reflection* true}
   :source-paths ["src/clojure"]
   :java-source-paths ["src/java"]
-  :aot [#"so.modernized.colder-wars.*"]
+  :aot [#"so.modernized.colder_wars.*"]
   :main so.modernized.colder-wars.desktop-launcher)
