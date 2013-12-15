@@ -1,7 +1,10 @@
 (ns so.modernized.colder-wars.util
-  (:require [clojure.string :as str])
-  (:use [so.modernized.high-concept.core]))
-;         [so.modernized.high-concept/core]]))
+  (:require [clojure.string :as str]))
+
+; A generic protocol for objects that need to have their memory allocation
+; managed manually.
+(defprotocol Disposable
+  (dispose [this]))
 
 
 ; Shamelessly yoinked from clojure/core.clj
@@ -21,7 +24,6 @@
   Evaluates body in a try expression with names bound to the values
   of the inits, and a finally clause that calls (.dispose name) on each
   name in reverse order."
-  {:added "1.0"}
   [bindings & body]
   (assert-args
      (vector? bindings) "a vector for its binding"
@@ -36,18 +38,14 @@
     :else (throw (IllegalArgumentException.
                    "with-disposal only allows Symbols in bindings"))))
 
-;(defmacro ^{:private true} camel
-;  [s]
-;  (symbol
-;   (str/replace s #"-(\w)" #(str/upper-case (second %)))))
-
 (defn- camelize
   [sym]
   (-> sym (str/replace #"-(\w)" (comp str/upper-case second))))
 
-(def ^:private capitalize (trident (comp str/upper-case first) str (comp (partial apply str) rest)))
+(map (comp (partial list '.) symbol (partial str "get") camelize str/capitalize) ['motion-state 'world-transform])
 
-(defmacro safely-get
-  [from field result]
-    (let [getter (->> field camelize capitalize (str "get") symbol)]
-    `(.set ~result (. ~from ~getter))))
+(defmacro safely-get-in
+  [set-into m fields]
+  (let [getters (map (comp (partial list '.) symbol (partial str "get") camelize str/capitalize) fields)]
+  `(.set ~set-into (-> ~m
+                     ~@getters))))

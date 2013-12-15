@@ -7,6 +7,13 @@
 ; - wrappers for matrix, vector, quaternion, and transform, conversion between transform and matrix4
 ; - vector/matrix pool?
 
+(def ^:private matrixlike-impl
+  {:dot! #(.mul %1 %2)
+   :invert! #(.inv %)
+   :transpose! #(.tra %)
+   :set! #(.set %1 %2)
+   :determinant #(.det %)})
+
 (defprotocol MatrixLike
   (dot! [this other])
   (invert! [this])
@@ -14,13 +21,33 @@
   (set! [this values])
   (determinant [this]))
 
+(defprotocol TransformLike
+  (translation-of [this])
+  (rotation-of [this]))
+
+(defprotocol VectorLike)
+
+(extend Matrix4
+  MatrixLike
+  matrixlike-impl
+  TransformLike
+  {:translation (fn [this] (.getTranslation this (Vector3.)))
+   :rotation (fn [this] (.getRotation this (Quaternion.)))})
+
+(extend Matrix3
+  MatrixLike
+  matrixlike-impl)
+
+(extend btTransform
+  TransformLike
+  {:translation (fn [this] (Vector3. (.getOrigin this)))
+   :rotation (fn [this] (Quaternion. (.getRotation this)))})
+
 
 (defn make-vector
   ([^double f1 ^double f2] (Vector2. f1 f2))
-  ([^double f1 ^double f2 ^double f3] (Vector3. f1 f2 f3)))
-
-(defn make-quaternion
-  [^double f1 ^double f2 ^double f3 ^double f4] (Quaternion. f1 f2 f3 f4))
+  ([^double f1 ^double f2 ^double f3] (Vector3. f1 f2 f3))
+  ([^double f1 ^double f2 ^double f3 ^double f4] (Quaternion. f1 f2 f3 f4)))
 
 (defn eye
   ([] (eye 3))
@@ -34,7 +61,8 @@
   ([size]
    (cond (= 3 size) (Vector3.)
          (= 2 size) (Vector2.)
-         :else (throw (IllegalArgumentException. "Only vectors of size 2 and 3 are supported")))))
+         (= 4 size) (Quaternion.)
+         :else (throw (IllegalArgumentException. "Only vectors of size 2, 3, and 4 are supported")))))
 
 (defn make-matrix
   ([^floats fs]
